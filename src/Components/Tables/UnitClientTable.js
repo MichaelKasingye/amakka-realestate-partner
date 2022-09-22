@@ -12,7 +12,7 @@ export default function Index() {
   const { ClientInterest, loading } = useSelector(ClientInterestSelector);
   const dispatch = useDispatch();
 
-
+console.log(loading);
 
   const ClientData = ClientInterest.map((info) => ({
     Name: info.data.name,

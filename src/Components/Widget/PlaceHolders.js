@@ -14,11 +14,7 @@ export  function PlaceHolders() {
         <span className="placeholder col-6" />
         <span className="placeholder col-8" />
       </p>
-      {/* <a
-        href="#"
-        tabIndex={-1}
-        className="btn btn-primary disabled placeholder col-6"
-      /> */}
+      
     </div>
   </div>
   </div>
