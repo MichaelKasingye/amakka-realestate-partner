@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import { SidebarData } from './SidebarData';
-import { Link } from 'react-router-dom'
+import React, { useState } from "react";
+import Offcanvas from "react-bootstrap/Offcanvas";
+import { SidebarData } from "./SidebarData";
+import { Link } from "react-router-dom";
+import { Logout, logout } from "../../services/gooleAuth";
 
 export default function OnActiveSideMenu() {
   const [show, setShow] = useState(false);
@@ -12,7 +13,7 @@ export default function OnActiveSideMenu() {
   return (
     <nav className=" navbar navbar-expand-lg navbar-light bg-light  header fixed-top d-flex align-items-center">
       <span>Amaakka-Partner</span>
-      <span className="navbar-toggler-icon mx-2" onClick={handleShow}/>
+      <span className="navbar-toggler-icon mx-2" onClick={handleShow} />
 
       <Offcanvas show={show} onHide={handleClose}>
         <Offcanvas.Header closeButton>
@@ -20,24 +21,28 @@ export default function OnActiveSideMenu() {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <ul className="sidebar-nav" id="sidebar-nav">
-    <li className="nav-item">
-      <Link className="nav-link " to="/">
-        <i className="bi bi-grid" />
-        <span>Overview</span>
-      </Link>
-    </li>
-    {/* End Dashboard Overview */}
-    
-    <li className="nav-heading">Pages</li>
-    {SidebarData.map((info, idx) => (
-    <li className="nav-item" key={idx}>
-      <Link className="nav-link collapsed" to={info.path}>
-        {info.icon}
-        <span>{info.title}</span>
-      </Link>
-    </li>
-    ))}
-  </ul>
+            <li className="nav-item">
+              <Link className="nav-link " to="/">
+                <i className="bi bi-grid" />
+                <span>Overview</span>
+              </Link>
+            </li>
+            {/* End Dashboard Overview */}
+
+            <li className="nav-heading">Pages</li>
+            {SidebarData.map((info, idx) => (
+              <li className="nav-item" key={idx}>
+                <Link className="nav-link collapsed" to={info.path}>
+                  {info.icon}
+                  <span>{info.title}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <button className="btn btn-dark px-4 w-100 rounded-1" type="submit" onClick={Logout}>
+          Sign out
+          </button>
         </Offcanvas.Body>
       </Offcanvas>
     </nav>

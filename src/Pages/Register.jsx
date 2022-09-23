@@ -32,21 +32,7 @@ export default function Register() {
                       </p>
                     </div>
                     <form className="row g-3 needs-validation" noValidate="">
-                      {/* <div className="col-12">
-                        <label htmlFor="yourName" className="form-label">
-                          Your Name
-                        </label>
-                        <input
-                          type="text"
-                          name="name"
-                          className="form-control"
-                          id="yourName"
-                          required=""
-                        />
-                        <div className="invalid-feedback">
-                          Please, enter your name!
-                        </div>
-                      </div> */}
+                   
                       <div className="col-12">
                         <label htmlFor="yourEmail" className="form-label">
                           Your Email

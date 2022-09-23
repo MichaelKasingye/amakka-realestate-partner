@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "aos/dist/aos.css";
@@ -21,19 +21,42 @@ import Error from "./Pages/Error";
 import "./App.css";
 import { fetchClientInterestAsync } from "./redux/features/ClientInterest/ClientInterestSlice";
 import { useDispatch } from "react-redux";
+import {
+  getAuth,
+  onAuthStateChanged,
+} from 'firebase/auth';
+
+const auth = getAuth();
 
 function App() {
-  const isAllowed = false;
+  const [currentUser, setCurrentUser] = useState(null);
+  // const [errors, setErrors] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isAllowed, setIsAllowed] = useState(false);
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(fetchClientInterestAsync());
     Aos.init({ duration: 900 });
   }, [dispatch]);
 
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+      setLoading(false);
+      if (user) {
+        setIsAllowed(true)
+      }
+    });
+
+    return unsubscribe;
+  }, []);
+console.log(currentUser);
+
   return (
     <main id="main" className="main">
-      {isAllowed ? (
+      {currentUser ? (
         <BrowserRouter>
           <Nav />
           <Sidebar />
