@@ -4,7 +4,7 @@ import Swal from "sweetalert2";
 // import withReactContent from "sweetalert2-react-content";
 // import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { login } from "../services/gooleAuth";
+import { login } from "../services/gooleAuth";
 import { useDispatch } from "react-redux";
 import { fetchUserCodeAsync } from "../redux/features/userCode/UserCodeSlice";
 // import { routePaths } from "../Route/Paths";
@@ -40,7 +40,7 @@ export default function Login() {
     try {
       setLoading(true);
       await dispatch(fetchUserCodeAsync(data));
-      // await login(data);
+      await login(data);
       await Swal.fire({
         position: "top-end",
         icon: "success",

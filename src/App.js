@@ -30,6 +30,7 @@ const auth = getAuth();
 
 function App() {
   const dispatch = useDispatch();
+ 
 
   useEffect(() => {
     dispatch(fetchClientInterestAsync());
@@ -38,14 +39,15 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log(user);
       dispatch(fetchUserAsync(user));
     });
 
     return unsubscribe;
   }, [dispatch]);
+ 
   const { User } = useSelector(UserSelector);
   console.log(User);
-
   return (
     <main id="main" className="main">
       <BrowserRouter>
