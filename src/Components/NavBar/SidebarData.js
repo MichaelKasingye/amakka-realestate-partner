@@ -6,6 +6,11 @@ export const SidebarData = [
     path: "/entries-page",
    icon: <i className="bi bi-person" />
   },
+  {
+    title: "Access",
+    path: "/access",
+   icon: <i className="bi bi-lock" />
+  },
 //   {
 //     title: "Services",
 //     path: "/",

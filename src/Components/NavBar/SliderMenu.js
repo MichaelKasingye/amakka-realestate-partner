@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { SidebarData } from "./SidebarData";
 import { Link } from "react-router-dom";
-import { Logout, logout } from "../../services/gooleAuth";
+import { Logout } from "../../services/gooleAuth";
 
 export default function OnActiveSideMenu() {
   const [show, setShow] = useState(false);
@@ -20,7 +20,7 @@ export default function OnActiveSideMenu() {
           <Offcanvas.Title>Amaakka-Partner</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <ul className="sidebar-nav" id="sidebar-nav">
+          <ul className="sidebar-nav" id="sidebar-nav" onClick={handleClose}>
             <li className="nav-item">
               <Link className="nav-link " to="/">
                 <i className="bi bi-grid" />
@@ -31,8 +31,8 @@ export default function OnActiveSideMenu() {
 
             <li className="nav-heading">Pages</li>
             {SidebarData.map((info, idx) => (
-              <li className="nav-item" key={idx}>
-                <Link className="nav-link collapsed" to={info.path}>
+              <li className="nav-item" key={idx} >
+                <Link className="nav-link collapsed" to={info.path} >
                   {info.icon}
                   <span>{info.title}</span>
                 </Link>
@@ -40,7 +40,7 @@ export default function OnActiveSideMenu() {
             ))}
           </ul>
 
-          <button className="btn btn-dark px-4 w-100 rounded-1" type="submit" onClick={Logout}>
+          <button className="btn btn-dark px-4 w-100 rounded-1" type="submit" onClick={Logout} onHide={handleClose}>
           Sign out
           </button>
         </Offcanvas.Body>

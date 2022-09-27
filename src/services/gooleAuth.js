@@ -1,5 +1,7 @@
-import { useNavigate } from "react-router-dom";
+/* eslint-disable no-unused-vars */
 
+import { useNavigate } from "react-router-dom";
+import app from "../config/firebase";
 import {
     getAuth,
     signInWithEmailAndPassword,

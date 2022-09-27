@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 // import "bootstrap/dist/css/bootstrap.min.css";
 import "aos/dist/aos.css";
@@ -20,20 +20,15 @@ import About from "./Pages/About";
 import Error from "./Pages/Error";
 import "./App.css";
 import { fetchClientInterestAsync } from "./redux/features/ClientInterest/ClientInterestSlice";
-import { useDispatch } from "react-redux";
-import {
-  getAuth,
-  onAuthStateChanged,
-} from 'firebase/auth';
+import { useDispatch, useSelector } from "react-redux";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { ProtectedRoute } from "./Route/ProtectedRoutes";
+import Code from "./Pages/Code";
+import { fetchUserAsync, UserSelector } from "./redux/features/user/UserSlice";
 
 const auth = getAuth();
 
 function App() {
-  const [currentUser, setCurrentUser] = useState(null);
-  // const [errors, setErrors] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isAllowed, setIsAllowed] = useState(false);
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -43,50 +38,40 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
-      setLoading(false);
-      if (user) {
-        setIsAllowed(true)
-      }
+      dispatch(fetchUserAsync(user));
     });
 
     return unsubscribe;
-  }, []);
-console.log(currentUser);
+  }, [dispatch]);
+  const { User } = useSelector(UserSelector);
+  console.log(User);
 
   return (
     <main id="main" className="main">
-      {currentUser ? (
-        <BrowserRouter>
-          <Nav />
-          <Sidebar />
+      <BrowserRouter>
+        {User && <Nav />}
+        {User && <Sidebar />}
 
-          <Routes>
+        <Routes>
+          <Route element={<ProtectedRoute user={User} />}>
             <Route index element={<Home />} />
             <Route path="/entries-page" element={<Entries />} />
+            <Route path="/access" element={<Code />} />
+
             <Route
               path="/fetures-decription-page/:id"
               element={<EntriesDetails />}
             />
             <Route path="/about" element={<About />} />
-            {/* <Route path="/register" element={<Register />} /> */}
-
             <Route path="*" element={<Error />} />
-          </Routes>
-          <Modals />
-          <Footer />
-        </BrowserRouter>
-      ) : (
-        <BrowserRouter>
-          <Routes>
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+          </Route>
 
-            <Route path="*" element={<Error />} />
-          </Routes>
-        </BrowserRouter>
-      )}
-      
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
+        <Modals />
+        {User && <Footer />}
+      </BrowserRouter>
     </main>
   );
 }

@@ -53,7 +53,6 @@ export  function CardWidget() {
 
 
 export  function CardWidgetMini({ClientData,loading}) {
- console.log(ClientData);
 
   return (
     <>

@@ -1,15 +1,15 @@
 import { combineReducers } from "redux";
 
-// import SearchTermSReducer from "./SearchTerm/searchTermSlice";
+import UserReducer from "./user/UserSlice";
 import ClientInterestReducer from "./ClientInterest/ClientInterestSlice";
-// import projectsReducer from "./projects/projectSlice";
+import UserCodeReducer from "./userCode/UserCodeSlice";
 // import imageReducer from "./images/imageSlice";
 // import enrollmentReducer from "./enrollment/enrollmentSlice";
 
 const rootReducer = combineReducers({
-//   SearchTerm: SearchTermSReducer,
-ClientInterest: ClientInterestReducer,
-  //   projects: projectsReducer,
+  User: UserReducer,
+  ClientInterest: ClientInterestReducer,
+  UserCode: UserCodeReducer,
   //   imageUrl: imageReducer,
   //   enrollment: enrollmentReducer,
 });

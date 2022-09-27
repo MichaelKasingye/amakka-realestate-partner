@@ -1,24 +1,29 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-import { ToastContainer, toast } from "react-toastify";
+// import withReactContent from "sweetalert2-react-content";
+// import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { login } from "../services/gooleAuth";
+// import { login } from "../services/gooleAuth";
+import { useDispatch } from "react-redux";
+import { fetchUserCodeAsync } from "../redux/features/userCode/UserCodeSlice";
+// import { routePaths } from "../Route/Paths";
+
 // import ProductTitle  from '../Components/BodyTitle/ProductTitle';
 
-const customButton = withReactContent(
-  Swal.mixin({
-    customClass: {
-      confirmButton: "btn btn-dark me-3",
-    },
-    buttonsStyling: false,
-  })
-);
+// const customButton = withReactContent(
+//   Swal.mixin({
+//     customClass: {
+//       confirmButton: "btn btn-dark me-3",
+//     },
+//     buttonsStyling: false,
+//   })
+// );
 
 export default function Login() {
+  const dispatch = useDispatch();
 
-    const history = useNavigate();
+  const history = useNavigate();
   // const { login,errors,currentUser } = useAuth()
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
@@ -34,7 +39,8 @@ export default function Login() {
     e.preventDefault();
     try {
       setLoading(true);
-      await login(data)
+      await dispatch(fetchUserCodeAsync(data));
+      // await login(data);
       await Swal.fire({
         position: "top-end",
         icon: "success",
@@ -43,7 +49,7 @@ export default function Login() {
         timer: 1500,
       });
 
-      await history("/");
+      await history("/access");
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +67,7 @@ export default function Login() {
 
   return (
     <>
-      <main>
+      <div className="login">
         <div className="container">
           <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
             <div className="container">
@@ -91,7 +97,10 @@ export default function Login() {
                           Enter your personal details to Login
                         </p>
                       </div>
-                      <form className="row g-3 needs-validation"  onSubmit={handleSubmit}>
+                      <form
+                        className="row g-3 needs-validation"
+                        onSubmit={handleSubmit}
+                      >
                         <div className="col-12">
                           <label htmlFor="yourEmail" className="form-label">
                             Your Email
@@ -106,7 +115,7 @@ export default function Login() {
                             required
                           />
                           <div className="invalid-feedback">
-                            Please enter a valid Email adddress!
+                            Please enter a valid Email address!
                           </div>
                         </div>
 
@@ -129,9 +138,12 @@ export default function Login() {
                         </div>
 
                         <div className="col-12">
-                        <button className="btn btn-dark px-4 w-100 rounded-1" type="submit">
-                          {loading ? 'Logging...': 'Login'}
-                        </button>
+                          <button
+                            className="btn btn-dark px-4 w-100 rounded-1"
+                            type="submit"
+                          >
+                            {loading ? "Logging..." : "Login"}
+                          </button>
                         </div>
                       </form>
                     </div>
@@ -141,7 +153,7 @@ export default function Login() {
             </div>
           </section>
         </div>
-      </main>
+      </div>
       {/* End #main */}
     </>
   );

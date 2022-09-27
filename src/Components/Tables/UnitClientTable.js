@@ -7,14 +7,18 @@ import {
 } from "../../redux/features/ClientInterest/ClientInterestSlice";
 import { PlaceHoldersParagraphs } from "../Widget/PlaceHolders";
 import { CSVLink } from "react-csv";
+import { UserCodeSelector } from "../../redux/features/userCode/UserCodeSlice";
+import ErrorMessage from "../ErrorMessage";
 
 export default function Index() {
   const { ClientInterest, loading } = useSelector(ClientInterestSelector);
+  const { UserCode  } = useSelector(UserCodeSelector);
   const dispatch = useDispatch();
 
-  console.log(loading);
+  const ClientInterestCodeData = (ClientInterest.filter(filteredCodeData => filteredCodeData.unit.developerCODE  === UserCode.code));
+  // console.log(ClientInterestCodeData);
 
-  const ClientData = ClientInterest.map((info) => ({
+  const ClientData = ClientInterestCodeData.map((info) => ({
     Name: info.data.name,
     Phone_Number: info.data.phoneNumber,
     Email: info.data.email,
@@ -26,7 +30,7 @@ export default function Index() {
   function upDateFieldData(id, statusValue) {
     dispatch(updateClientInterestAsync(id, { status: statusValue }));
   }
-  // console.log(ClientInterest);
+  // console.log(ClientInterest?.map(data => data.unit.developerCODE));
 
   const tableHeadings = [
     // "Date",
@@ -58,7 +62,7 @@ export default function Index() {
             </tr>
           </thead>
           <tbody>
-            {ClientInterest?.map((info, idx) => (
+            {ClientInterestCodeData?.map((info, idx) => (
               <tr key={idx}>
                 <td>{idx + 1}</td>
                 <td>{info.data.name}</td>
@@ -145,10 +149,13 @@ export default function Index() {
               </tr>
             ))}
           </tbody>
+
         </table>
       ) : (
         <PlaceHoldersParagraphs />
       )}
+          {ClientInterestCodeData.length === 0 && <ErrorMessage/>}
+
     </div>
   );
 }
