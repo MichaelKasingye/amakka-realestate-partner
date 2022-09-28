@@ -15,15 +15,17 @@ export function login({email, password}) {
     .then((userCredential) => {
       // Signed in 
       const user = userCredential.user;
-      console.log(user);
+      // console.log(user);
       return user
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
     //   setErrors(errorCode);
-      console.log(errorCode);
-      return new Error(`An error ocurred ${errorMessage}`)
+      // console.log(errorCode);
+      // return new Error({error:errorMessage})
+      return ({error:errorMessage})
+
     });
   }
 

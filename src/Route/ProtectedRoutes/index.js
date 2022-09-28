@@ -9,7 +9,7 @@ import {
   } from "react-router-dom";
 
  export const ProtectedRoute = ({ user, redirectPath = "/login", children }) => {
-    if (!user) {
+    if (!user?.email) {
       return <Navigate to={redirectPath} replace />;
     }
   

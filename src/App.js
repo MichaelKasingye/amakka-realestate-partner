@@ -47,12 +47,12 @@ function App() {
   }, [dispatch]);
  
   const { User } = useSelector(UserSelector);
-  console.log(User);
+  // console.log(User?.email);
   return (
     <main id="main" className="main">
       <BrowserRouter>
-        {User && <Nav />}
-        {User && <Sidebar />}
+        {User?.email && <Nav />}
+        {User?.email && <Sidebar />}
 
         <Routes>
           <Route element={<ProtectedRoute user={User} />}>

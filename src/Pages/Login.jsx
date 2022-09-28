@@ -1,31 +1,33 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 // import withReactContent from "sweetalert2-react-content";
-// import { ToastContainer, toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { login } from "../services/gooleAuth";
-import { useDispatch } from "react-redux";
-import { fetchUserCodeAsync } from "../redux/features/userCode/UserCodeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchUserDataAsync,
+  UserSelector,
+} from "../redux/features/user/UserSlice";
 // import { routePaths } from "../Route/Paths";
 
-// import ProductTitle  from '../Components/BodyTitle/ProductTitle';
-
-// const customButton = withReactContent(
-//   Swal.mixin({
-//     customClass: {
-//       confirmButton: "btn btn-dark me-3",
-//     },
-//     buttonsStyling: false,
-//   })
-// );
-
 export default function Login() {
+  const notify = () =>
+    toast.success("Loading..", {
+      position: "top-left",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+
+  const { User, loading } = useSelector(UserSelector);
+
   const dispatch = useDispatch();
 
   const history = useNavigate();
-  // const { login,errors,currentUser } = useAuth()
-  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -38,36 +40,46 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      setLoading(true);
-      await dispatch(fetchUserCodeAsync(data));
-      await login(data);
-      await Swal.fire({
-        position: "top-end",
-        icon: "success",
-        title: "Logging successfully",
-        showConfirmButton: false,
-        timer: 1500,
-      });
-
-      await history("/access");
+      await dispatch(fetchUserDataAsync(data));
     } catch (error) {
       console.log(error);
     }
-
-    setLoading(false);
   };
-  console.log(data);
+  // console.log(User?.error);
+  // console.log("loading: " + loading);
 
-  // useEffect(() => {
-  //   if (errors !== null) {
-  //     customButton.fire("Error", `${errors}`, "error");
-  //   }
-  //   // if(loading && !errors ){ notify()  }
-  // }, [errors]);
+  useEffect(() => {
+    if (User?.error) {
+      Swal.fire({
+        position: "top-end",
+        icon: "error",
+        title: "Error, " + User?.error + " ,error",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    }
+    if (loading) {
+      notify();
+    }
+    if (User?.email) {
+      history("/access");
+    }
+  }, [User?.error, User?.email, history, loading]);
 
   return (
     <>
       <div className="login">
+        <ToastContainer
+          position="top-left"
+          autoClose={1000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <div className="container">
           <section className="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
             <div className="container">
@@ -97,6 +109,11 @@ export default function Login() {
                           Enter your personal details to Login
                         </p>
                       </div>
+                      {User?.error && (
+                        <h6 className="text-danger fw-bold">
+                          Invalid user name or password
+                        </h6>
+                      )}
                       <form
                         className="row g-3 needs-validation"
                         onSubmit={handleSubmit}
