@@ -55,7 +55,7 @@ export default function Register() {
       console.log(error);
     }
   };
-  // console.log(User?.error);
+  console.log(User);
   console.log("hasErrors: " + hasErrors);
 
   useEffect(() => {
@@ -69,7 +69,6 @@ export default function Register() {
       });
     }
     if (User) {
-      console.log("notify");
       notify();
     }
     if (User?.email) {

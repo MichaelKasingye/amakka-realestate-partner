@@ -49,8 +49,10 @@ export function register({ email, password, displayName }) {
       const errorCode = error.code;
       const errorMessage = error.message;
       console.log(errorMessage);
-      return { error: errorMessage };
-        
+      // return { error: errorMessage };
+      return errorMessage;
+
+
     });
 }
 
