@@ -31,13 +31,18 @@ export function login({ email, password }) {
 }
 
 export function register({ email, password, displayName }) {
-  return createUserWithEmailAndPassword(auth, email, password, displayName)
+  const auth = getAuth();
+// console.log(displayName);
+   createUserWithEmailAndPassword(auth, email, password, displayName)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      console.log(userCredential);
+      updateProfile(auth.currentUser, {
+        displayName
+      })
+      // console.log(userCredential);
 
-      console.log(user);
+      // console.log(user);
       return user;
     })
     .catch((error) => {
@@ -45,8 +50,10 @@ export function register({ email, password, displayName }) {
       const errorMessage = error.message;
       console.log(errorMessage);
       return { error: errorMessage };
+        
     });
 }
+
 export function updateUser(name) {
   const auth = getAuth();
   updateProfile(auth.currentUser, {

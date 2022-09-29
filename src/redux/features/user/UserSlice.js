@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit";
-import { login } from "../../../services/gooleAuth";
+import { login, register } from "../../../services/gooleAuth";
 // import UpdateData, { getData } from "../../../services/fetchData";
 
 const initialState = {
@@ -55,6 +55,17 @@ export const fetchUserAsync = (user) => {
       dispatch(fetchUser());
       try {
         login(user).then((userData) =>  dispatch(fetchUserSuccess(userData)));
+      } catch (error) {
+        dispatch(fetchUserFailure(error));
+      }
+    };
+  };
+
+  export const fetchRegisteredUserDataAsync = (user) => {
+    return async (dispatch) => {
+      dispatch(fetchUser());
+      try {
+        register(user).then((userData) =>  dispatch(fetchUserSuccess(userData)));
       } catch (error) {
         dispatch(fetchUserFailure(error));
       }

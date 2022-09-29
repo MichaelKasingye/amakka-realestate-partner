@@ -14,8 +14,8 @@ import Avatar from "../Avatar";
 // import "./navbar.css";
 function Navbar() {
   const { User } = useSelector(UserSelector);
-  // console.log(User?.photoURL);
-  //   const history = useHistory();
+  console.log(User?.email);
+  // const [userBoolean, setUserBoolean] = useState(false)
 
   return (
     <>
@@ -25,7 +25,7 @@ function Navbar() {
             Amaakka-Partner
           </Link>
           <div className="avatar">
-          <Avatar name={User?.displayName} image={User?.photoURL}/>
+          <Avatar name={User?.displayName} image={User?.photoURL} email={User?.email}/>
 
           </div>
           

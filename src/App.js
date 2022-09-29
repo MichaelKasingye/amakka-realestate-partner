@@ -29,6 +29,9 @@ import { fetchUserAsync, UserSelector } from "./redux/features/user/UserSlice";
 const auth = getAuth();
 
 function App() {
+
+  const { User } = useSelector(UserSelector);
+
   const dispatch = useDispatch();
  
 
@@ -44,9 +47,8 @@ function App() {
     });
 
     return unsubscribe;
-  }, [dispatch]);
+  }, [dispatch, User]);
  
-  const { User } = useSelector(UserSelector);
   // console.log(User?.email);
   return (
     <main id="main" className="main">

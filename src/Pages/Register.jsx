@@ -6,11 +6,12 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchUserDataAsync,
+  fetchRegisteredUserDataAsync,
+  // fetchUserDataAsync,
   UserSelector,
 } from "../redux/features/user/UserSlice";
-import { register, updateUser } from "../services/gooleAuth";
-// import ProductTitle  from '../Components/BodyTitle/ProductTitle';
+// import { register } from "../services/gooleAuth";
+import Tooltip  from '../Components/Tooltip';
 
 export default function Register() {
   const notify = () =>
@@ -24,8 +25,9 @@ export default function Register() {
       progress: undefined,
     });
 
-  const { User, loading } = useSelector(UserSelector);
+  const { User, loading, hasErrors } = useSelector(UserSelector);
 
+  console.log({User, hasErrors});
   const dispatch = useDispatch();
 
   const history = useNavigate();
@@ -42,15 +44,19 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await register(data)
-      await updateUser(data.displayName)
+      // await register(data)
+
+      // await fetchRegisteredUserDataAsync(data)
+      await dispatch(fetchRegisteredUserDataAsync(data));
+
+      // await updateUser(data.displayName)
       // await dispatch(fetchUserDataAsync(data));
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(User?.error);
-  // console.log("loading: " + loading);
+  // console.log(User?.error);
+  console.log("hasErrors: " + hasErrors);
 
   useEffect(() => {
     if (User?.error) {
@@ -62,13 +68,14 @@ export default function Register() {
         timer: 1500,
       });
     }
-    if (loading) {
+    if (User) {
+      console.log("notify");
       notify();
     }
-    // if (User?.email) {
-    //   history("/access");
-    // }
-  }, [User?.error, User?.email, history, loading]);
+    if (User?.email) {
+      history("/access");
+    }
+  }, [User, User?.error, User?.email, history, loading]);
 
   return (
     <>
@@ -113,18 +120,17 @@ export default function Register() {
                           Enter your personal details to create account
                         </p>
                       </div>
-                      {User?.error && (
+                      {hasErrors && (
                         <h6 className="text-danger fw-bold">
-                          Invalid user name or password
+                          The Email is already in use
                         </h6>
                       )}
                       <form
-                        className="row g-3 needs-validation"
-                        noValidate
+                        className="row g-3 "
                         onSubmit={handleSubmit}
                       >
                         <div className="col-12">
-                          <label htmlFor="yourEmail" className="form-label">
+                          <label  className="form-label">
                             Your Email
                           </label>
                           <input
@@ -133,15 +139,11 @@ export default function Register() {
                             value={data.email}
                             onChange={handleChange}
                             className="form-control"
-                            id="yourEmail"
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please enter a valid Email adddress!
-                          </div>
                         </div>
                         <div className="col-12">
-                          <label htmlFor="yourUsername" className="form-label">
+                          <label className="form-label">
                             Name
                           </label>
                           <div className="input-group has-validation">
@@ -154,26 +156,22 @@ export default function Register() {
                               placeholder="Please enter your name."
                               required
                             />
-                            <div className="invalid-feedback">
-                              Please choose a username.
-                            </div>
                           </div>
                         </div>
                         <div className="col-12">
                           <label htmlFor="yourPassword" className="form-label">
                             Password
                           </label>
+                          <div className="w-100 d-flex align-items-center border">
                           <input
                             type="password"
                             name="password"
                             value={data.password}
                             onChange={handleChange}
                             className="form-control"
-                            id="yourPassword"
                             required
                           />
-                          <div className="invalid-feedback">
-                            Please enter your password!
+                          <Tooltip password={data.password}/>
                           </div>
                         </div>
 
@@ -185,12 +183,6 @@ export default function Register() {
                             {loading ? "Creating..." : "Create Account"}
                           </button>
                         </div>
-                        {/* <div className="col-12">
-                        <p className="small mb-0">
-                          Already have an account?{" "}
-                          <Link to="/login">Log in</Link>
-                        </p>
-                      </div> */}
                       </form>
                     </div>
                   </div>
