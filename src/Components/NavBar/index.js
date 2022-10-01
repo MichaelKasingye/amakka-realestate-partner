@@ -14,7 +14,6 @@ import Avatar from "../Avatar";
 // import "./navbar.css";
 function Navbar() {
   const { User } = useSelector(UserSelector);
-  console.log(User?.email);
   // const [userBoolean, setUserBoolean] = useState(false)
 
   return (

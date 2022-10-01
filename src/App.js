@@ -29,11 +29,9 @@ import { fetchUserAsync, UserSelector } from "./redux/features/user/UserSlice";
 const auth = getAuth();
 
 function App() {
-
   const { User } = useSelector(UserSelector);
 
   const dispatch = useDispatch();
- 
 
   useEffect(() => {
     dispatch(fetchClientInterestAsync());
@@ -42,14 +40,12 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log(user);
       dispatch(fetchUserAsync(user));
     });
 
     return unsubscribe;
   }, [dispatch, User]);
- 
-  // console.log(User?.email);
+
   return (
     <main id="main" className="main">
       <BrowserRouter>

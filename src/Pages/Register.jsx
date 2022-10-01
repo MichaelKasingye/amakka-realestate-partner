@@ -1,36 +1,45 @@
+/* eslint-disable no-unused-vars */
+
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 // import withReactContent from "sweetalert2-react-content";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch, useSelector } from "react-redux";
+import {useSelector } from "react-redux";
 import {
-  fetchRegisteredUserDataAsync,
-  // fetchUserDataAsync,
   UserSelector,
 } from "../redux/features/user/UserSlice";
 // import { register } from "../services/gooleAuth";
 import Tooltip  from '../Components/Tooltip';
+import app from "../config/firebase";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+  // onAuthStateChanged,
+} from "firebase/auth";
 
 export default function Register() {
   const notify = () =>
-    toast.success("Loading..", {
-      position: "top-left",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+  toast.success("Loading..", {
+    position: "top-left",
+    autoClose: 1000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+  });
+  
+  const auth = getAuth();
+  const { User, loading } = useSelector(UserSelector);
 
-  const { User, loading, hasErrors } = useSelector(UserSelector);
-
-  console.log({User, hasErrors});
-  const dispatch = useDispatch();
+    
 
   const history = useNavigate();
+  const [userError, setUserError] = useState(null)
+
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -43,20 +52,25 @@ export default function Register() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      // await register(data)
-
-      // await fetchRegisteredUserDataAsync(data)
-      await dispatch(fetchRegisteredUserDataAsync(data));
-
-      // await updateUser(data.displayName)
-      // await dispatch(fetchUserDataAsync(data));
-    } catch (error) {
-      console.log(error);
-    }
+    createUserWithEmailAndPassword(auth, data.email, data.password, data.displayName)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      updateProfile(auth.currentUser, {
+        displayName:data.displayName,
+      });
+      
+      return user;
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      // return { error: errorMessage };
+      setUserError(errorMessage);
+    });
   };
-  console.log(User);
-  console.log("hasErrors: " + hasErrors);
+
+
 
   useEffect(() => {
     if (User?.error) {
@@ -119,13 +133,19 @@ export default function Register() {
                           Enter your personal details to create account
                         </p>
                       </div>
-                      {hasErrors && (
+                      {/* {hasErrors && (
                         <h6 className="text-danger fw-bold">
                           The Email is already in use
                         </h6>
+                      )} */}
+                       {userError && (
+                        <h6 className="text-danger fw-bold">
+                          {/* The Email is already in use */}
+                          {userError.slice(15)}
+                        </h6>
                       )}
                       <form
-                        className="row g-3 "
+                        className="row g-3 " 
                         onSubmit={handleSubmit}
                       >
                         <div className="col-12">

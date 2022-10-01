@@ -1,12 +1,12 @@
 /* eslint-disable no-unused-vars */
-
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import app from "../config/firebase";
 import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
-  updateProfile
+  updateProfile,
   // onAuthStateChanged,
 } from "firebase/auth";
 
@@ -32,14 +32,14 @@ export function login({ email, password }) {
 
 export function register({ email, password, displayName }) {
   const auth = getAuth();
-// console.log(displayName);
-   createUserWithEmailAndPassword(auth, email, password, displayName)
+  // console.log(displayName);
+  createUserWithEmailAndPassword(auth, email, password, displayName)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
       updateProfile(auth.currentUser, {
-        displayName
-      })
+        displayName,
+      });
       // console.log(userCredential);
 
       // console.log(user);
@@ -51,16 +51,15 @@ export function register({ email, password, displayName }) {
       console.log(errorMessage);
       // return { error: errorMessage };
       return errorMessage;
-
-
     });
 }
+
 
 export function updateUser(name) {
   const auth = getAuth();
   updateProfile(auth.currentUser, {
-    displayName: name
-  })
+    displayName: name,
+  });
   // .then((displayedName) => {
   //   console.log(displayedName);
   //   console.log("name successful..");

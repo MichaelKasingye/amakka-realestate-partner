@@ -38,12 +38,10 @@ export default function Code() {
 
       await history("/entries-page");
     } catch (error) {
-      console.log(error);
     }
 
     setLoading(false);
   };
-  console.log(data);
   return (
     <>
     <div className="login">
